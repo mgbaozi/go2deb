@@ -3,7 +3,7 @@ if [ -z "$NAME" ]; then
 	export NAME=$1
 fi
 
-cd $GOPATH/src/$NAME && go get -d
+cd /src/$NAME && go get -d
 cd /build && go build $NAME
 
 if [ -z "$VERSION" ]; then
@@ -15,7 +15,7 @@ if [ -z "$VERSION" ]; then
 fi
 
 if [ -d "$GOPATH/src/$NAME/etc" ]; then
-	fpm -s dir -t deb -n $NAME -v $VERSION -a amd64 /build/$NAME=/usr/local/bin/$NAME $GOPATH/src/$NAME/etc=/
+	fpm -s dir -t deb -n $NAME -v $VERSION -a amd64 /build/$NAME=/usr/local/bin/$NAME /src/$NAME/etc=/
 else
 	fpm -s dir -t deb -n $NAME -v $VERSION -a amd64 /build/$NAME=/usr/local/bin/$NAME
 fi
