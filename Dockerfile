@@ -24,7 +24,7 @@ RUN apt-get update && \
     apt-get -y install ruby ruby-dev rubygems
 RUN gem install fpm
 
-COPY build.sh /bin
+COPY ./build.sh /bin/
 RUN chmod +x /bin/build.sh
 
 CMD /bin/build.sh
