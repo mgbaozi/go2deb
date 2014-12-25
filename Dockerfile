@@ -19,7 +19,7 @@ RUN curl -L https://github.com/golang/go/archive/master.zip -o /tmp/go.zip && \
 	cd $GOROOT/src && \
 	./all.bash
 
-$ Install Ruby and Gem
+# Install Ruby and Gem
 RUN apt-get update && \
     apt-get -y install ruby ruby-dev rubygems
 RUN gem install fpm
