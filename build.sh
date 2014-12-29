@@ -14,8 +14,23 @@ if [ -z "$VERSION" ]; then
 	fi
 fi
 
-if [ -d "$GOPATH/src/$NAME/etc" ]; then
-	fpm -s dir -t deb -n $NAME -v $VERSION -a amd64 /build/$NAME=/usr/local/bin/$NAME /src/$NAME/etc=/
-else
-	fpm -s dir -t deb -n $NAME -v $VERSION -a amd64 /build/$NAME=/usr/local/bin/$NAME
+export ADDITION_ARGS=""
+export ROOT=/src/$NAME
+
+if [ -d "$ROOT/debian"]; then
+    if [ -f "$ROOT/debian/after-install"]; then
+        export ADDITION_ARGS="$ADDITION_ARGS --after-install $ROOT/debian/after-install"
+    fi
+    if [ -f "$ROOT/debian/before-remove"]; then
+        export ADDITION_ARGS="$ADDITION_ARGS --before-remove $ROOT/debian/before-remove"
+    fi
+    if [ -f "$ROOT/debian/$NAME.init"]; then
+        export ADDITION_ARGS="$ADDITION_ARGS --deb-init $ROOT/debian/$NAME.init"
+    fi
 fi
+
+if [ -d "$ROOT/etc" ]; then
+	export ADDITION_ARGS="$ADDITION_ARGS /src/$NAME/etc=/"
+fi
+
+fpm -s dir -t deb -n $NAME -v $VERSION -a amd64 /build/$NAME=/usr/local/bin/$NAME `echo $ADDITION_ARGS`
